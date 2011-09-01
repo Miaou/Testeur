@@ -43,6 +43,22 @@
 <node TEXT="pas de fullscreen" ID="ID_47489691" CREATED="1314825095502" MODIFIED="1314825099678"/>
 </node>
 </node>
+<node TEXT="2&#xb0;" ID="ID_61499380" CREATED="1314878124474" MODIFIED="1314878126949">
+<node TEXT="Bien copi&#xe9; du premier" ID="ID_75728741" CREATED="1314878127094" MODIFIED="1314878143741"/>
+<node TEXT="fenetre windows avec ses avantages" ID="ID_1176989344" CREATED="1314878156227" MODIFIED="1314878220300"/>
+<node TEXT="sous fenetre sdl avec ses avantages aussi" ID="ID_113936964" CREATED="1314878162725" MODIFIED="1314878268184"/>
+<node TEXT="WinMain" ID="ID_88026294" CREATED="1314878171827" MODIFIED="1314878179772">
+<node TEXT="on parse les msg wnd" ID="ID_1517644861" CREATED="1314878180018" MODIFIED="1314878191696"/>
+<node TEXT="puis les SDL" ID="ID_890593131" CREATED="1314878191940" MODIFIED="1314878194419"/>
+</node>
+<node TEXT="mono thread" ID="ID_1132577200" CREATED="1314878195596" MODIFIED="1314878199485"/>
+<node TEXT="D&#xe9;coupage des fichiers" ID="ID_1371212341" CREATED="1314878337215" MODIFIED="1314878342435">
+<node TEXT="???" ID="ID_674762767" CREATED="1314878368135" MODIFIED="1314878369281"/>
+<node TEXT="Serait bien propre d&apos;isoler SDL de la partie Windows mais rend difficile les probl&#xe9;matiques de communication" ID="ID_1070041831" CREATED="1314878369575" MODIFIED="1314878431754"/>
+<node TEXT="&#xe7;a doit se faire par l&apos;interfa&#xe7;age des classes... On partage ensuite un pointeur global !" ID="ID_79042899" CREATED="1314882819893" MODIFIED="1314882855657"/>
+<node TEXT="Faut aussi pr&#xe9;voir pour la musique !!!" ID="ID_1434530444" CREATED="1314883475485" MODIFIED="1314883482379"/>
+</node>
+</node>
 </node>
 </node>
 </map>
