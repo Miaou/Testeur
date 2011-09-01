@@ -2,9 +2,8 @@
 .backup/
 
 # Pour les fichiers indésirables de Visual Studio
-debug/
-release/
 Debug/
 Release/
 *.ncb
+*.suo
 
