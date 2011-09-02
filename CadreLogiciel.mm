@@ -6,6 +6,7 @@
 <node TEXT="Le logiciel support des lemmings" ID="ID_1068750936" CREATED="1314824407061" MODIFIED="1314824417547"/>
 <node TEXT="L&apos;interface g&#xe9;n&#xe9;rale" ID="ID_1968727222" CREATED="1314824417845" MODIFIED="1314824424429"/>
 <node TEXT="Les solutions pour la mettre en place" ID="ID_955859605" CREATED="1314824424711" MODIFIED="1314824434051"/>
+<node TEXT="En partie, les probl&#xe8;mes qu&apos;on rencontre au fil du temps" ID="ID_412217952" CREATED="1314969819099" MODIFIED="1314969831397"/>
 </node>
 <node TEXT="Id&#xe9;es pr&#xe9;-con&#xe7;ues" POSITION="right" ID="ID_66298223" CREATED="1314824435673" MODIFIED="1314824442886">
 <node TEXT="1&#xb0;" ID="ID_1788178852" CREATED="1314824445625" MODIFIED="1314824447956">
@@ -52,12 +53,23 @@
 <node TEXT="puis les SDL" ID="ID_890593131" CREATED="1314878191940" MODIFIED="1314878194419"/>
 </node>
 <node TEXT="mono thread" ID="ID_1132577200" CREATED="1314878195596" MODIFIED="1314878199485"/>
-<node TEXT="D&#xe9;coupage des fichiers" ID="ID_1371212341" CREATED="1314878337215" MODIFIED="1314878342435">
+<node TEXT="D&#xe9;coupage des fichiers (des .c et .h hein)" ID="ID_1371212341" CREATED="1314878337215" MODIFIED="1314969803131">
 <node TEXT="???" ID="ID_674762767" CREATED="1314878368135" MODIFIED="1314878369281"/>
 <node TEXT="Serait bien propre d&apos;isoler SDL de la partie Windows mais rend difficile les probl&#xe9;matiques de communication" ID="ID_1070041831" CREATED="1314878369575" MODIFIED="1314878431754"/>
 <node TEXT="&#xe7;a doit se faire par l&apos;interfa&#xe7;age des classes... On partage ensuite un pointeur global !" ID="ID_79042899" CREATED="1314882819893" MODIFIED="1314882855657"/>
 <node TEXT="Faut aussi pr&#xe9;voir pour la musique !!!" ID="ID_1434530444" CREATED="1314883475485" MODIFIED="1314883482379"/>
 </node>
+</node>
+</node>
+<node TEXT="A la vue du d&#xe9;but du d&#xe9;veloppement d&apos;un proto" POSITION="right" ID="ID_1373470663" CREATED="1314969835496" MODIFIED="1314969866436">
+<node TEXT="Il faut faire une classe de gestion des sprites (que tu as bien attaqu&#xe9;, Alex)" ID="ID_1476051684" CREATED="1314969866822" MODIFIED="1314969881669">
+<node TEXT="J&apos;ai d&#xe9;j&#xe0; ajout&#xe9; un truc : il faut qu&apos;on puisse conna&#xee;tre le nombre de sprite par action (par exemple, pour v&#xe9;rifier qu&apos;on est pas en train d&apos;appeler des sprites qui n&apos;existent pas)" ID="ID_1076547524" CREATED="1314970627955" MODIFIED="1314970678290"/>
+<node TEXT="peut-&#xea;tre aussi le nombre de sens par action" ID="ID_1943918887" CREATED="1314970647775" MODIFIED="1314970656170"/>
+<node TEXT="&#xe0; discuter !!!" ID="ID_890445073" CREATED="1314970680408" MODIFIED="1314970683109"/>
+</node>
+<node TEXT="Il faut faire une classe de gestion des sons et des musiques" ID="ID_805576364" CREATED="1314969888748" MODIFIED="1314969898504"/>
+<node TEXT="Serait-il int&#xe9;ressant de faire quelque chose qui dispense de la r&#xe9;solution choisie ?" ID="ID_427779374" CREATED="1314973034494" MODIFIED="1314973107667">
+<node TEXT="par exemple : on aurait une surface de dessin qui serait 1024x768, puis la surface qui est affich&#xe9;e dans la fen&#xea;tre est la taille que l&apos;utilisateur choisi, et boom, on adapte la surface de dessin &#xe0; cette surface d&apos;afihcage" ID="ID_60964618" CREATED="1314973108435" MODIFIED="1314973169563"/>
 </node>
 </node>
 </node>
