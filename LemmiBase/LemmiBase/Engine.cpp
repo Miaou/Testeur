@@ -9,6 +9,7 @@ CEngine::CEngine(void)
 	m_pSpritesMan = NULL;
 	m_sonPop = NULL;
 	m_sScreen = NULL;
+	m_pMapMan = NULL;
 }
 
 CEngine::~CEngine(void)
@@ -17,8 +18,16 @@ CEngine::~CEngine(void)
 }
 
 
-bool CEngine::Init(void)
+bool CEngine::Init(HWND hSDLWnd)
 {
+	char wndID[32];
+	
+	m_hSDL = hSDLWnd;	
+	
+	// SDL_WINDOWID hack
+	sprintf_s(wndID, 32, "SDL_WINDOWID=%u", m_hSDL);
+	_putenv(wndID);
+	
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 		// Faudra s'étendre quand les logs seront en route...
 		return false;
@@ -49,30 +58,28 @@ bool CEngine::Quit(void)
 // des sons, de la musique
 // hSDLWnd est la fenêtre dans laquelle s'afichera SDL
 // hSDLRect est la fenêtre qui définit la taille de la fenêtre SDL (PictureControl classiquement)
-int CEngine::StartEngine(HWND hSDLWnd, HWND hSDLRect)
+int CEngine::StartEngine(HWND hSDLRect)
 {
-	char wndID[32];
 	RECT rct;
 	
-	m_hSDL = hSDLWnd;
 	m_hWndForPlace = hSDLRect;
 	
-	// SDL_WINDOWID hack
-	sprintf_s(wndID, 32, "SDL_WINDOWID=%u", m_hSDL);
-	_putenv(wndID);
-
 	// Création de la fenêtre SDL
 	GetClientRect(m_hWndForPlace, &rct);
 	m_sScreen = SDL_SetVideoMode(rct.right-rct.left, rct.bottom-rct.top, 32, SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_RESIZABLE);
 	
 	// Chargement des images
-	m_pSpritesMan = new CBaseSprite();
+	m_pSpritesMan = new CBaseSprite(); // gérer le if...
 	m_pSpritesMan->ChargementSprites(); // gérer le if...
+
+	// Chargement des maps
+	m_pMapMan = new CBaseMap(); // Gérer le if...
+	m_pMapMan->ChargementMaps(); // -----------...
 	
-	// Les musiques
+	// Les musiques (sans manager pour l'instant)
 	m_musique = FSOUND_Stream_Open("Sons//PuyoCool.mp3", FSOUND_LOOP_NORMAL, 0, 0);
 	
-	// Les sons
+	// Les sons (idem)
 	m_sonPop = FSOUND_Sample_Load(FSOUND_FREE, "Sons//Pop.wav", 0, 0, 0);
 	
 	// Tout est prêt, on celebrate !
@@ -83,4 +90,66 @@ int CEngine::StartEngine(HWND hSDLWnd, HWND hSDLRect)
 	return 0; // Tout va bien ! Car je n'ai géré aucun des problèmes potentiels...
 }
 
+
+void CEngine::FrameMove()
+{
+	// C'est ici qu'on fera tout le travail, à chaque image !
+    SDL_Event sEvent;
+
+	// 1) Dispatch les messages SDL. La fonction réagit selon le besoin
+	// 2) On peut faire avancer le temps
+	// 3) On dessine
+	// 4) On met à jour les sons
+	while(SDL_PollEvent(&sEvent))
+		DispatchMsg(sEvent);
+	OneStep();
+	DrawFrame();
+	RaiseSounds();
+}
+
+
+void CEngine::DispatchMsg(SDL_Event sEvent)
+{
+	RECT rect;
+
+	switch(sEvent.type)
+	{
+	case SDL_MOUSEBUTTONDOWN:
+		//SDL_FillRect(g_sEcran, NULL, SDL_MapRGB(g_sEcran->format, 255, 255, 255));
+		break;
+	case SDL_MOUSEMOTION:
+		//sEvent.motion.x,sEvent.motion.y
+		break;
+	/*case SDL_KEYDOWN:
+		break;//*/
+	case SDL_VIDEORESIZE:
+		GetClientRect(m_hWndForPlace, &rect);
+		m_sScreen = SDL_SetVideoMode(rect.right-rect.left,rect.bottom-rect.top, 32, SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_RESIZABLE);
+		break;
+	default:
+		sEvent.type = sEvent.type; // Debug
+		break;
+	}
+}
+
+
+void CEngine::OneStep()
+{
+	// !!!
+}
+
+
+void CEngine::DrawFrame()
+{
+	SDL_FillRect(m_sScreen, NULL, 0);
+	SDL_BlitSurface(m_pMapMan->bg, NULL, m_sScreen, NULL);
+	SDL_BlitSurface(m_pMapMan->fg, NULL, m_sScreen, NULL);
+	SDL_Flip(m_sScreen);
+}
+
+
+void CEngine::RaiseSounds()
+{
+	// !!!
+}
 

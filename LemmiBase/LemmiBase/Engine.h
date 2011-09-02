@@ -5,6 +5,7 @@
 #include <SDL/SDL_image.h>
 #include <FMOD/fmod.h>
 #include "BaseSprite.h"
+#include "BaseMap.h"
 
 
 
@@ -16,14 +17,19 @@ public:
 	~CEngine(void);
 
 	// Fcts d'interfaçage
-	bool Init();
+	bool Init(HWND hSDLWnd);
 	bool Quit();
 
-	int StartEngine(HWND hSDLWnd, HWND hSDLRect);
+	int StartEngine(HWND hSDLRect);
+	void FrameMove();
 
 	// Faisons les choses "bien"
 private:
 	// Fcts internes
+	void DispatchMsg(SDL_Event sEvent);
+	void OneStep();
+	void DrawFrame();
+	void RaiseSounds();
 
 	// Variables internes
 	HWND m_hSDL, m_hWndForPlace;
@@ -31,4 +37,5 @@ private:
 	FSOUND_STREAM *m_musique;
 	FSOUND_SAMPLE *m_sonPop;
 	CBaseSprite *m_pSpritesMan;
+	CBaseMap *m_pMapMan;
 };

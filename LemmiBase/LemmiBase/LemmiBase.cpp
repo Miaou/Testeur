@@ -59,15 +59,18 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	// Inits globales
 	g_hSDL = g_hWnd = g_hDlgWnd = g_hTarget = NULL;
 	g_engine = new CEngine();
-	g_engine->Init();
 	
 	
 	// Effectue l'initialisation de l'application :
 	// c'est à dire la création de la fenêtre.
 	if (!InitInstance (hInstance, nCmdShow))
 		return FALSE;
+	
 
+	// Les trucs qui ont besoin de l'existence de la fenêtre pour démarrer
 	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_LEMMIBASE));
+	g_engine->Init(g_hSDL);
+	g_engine->StartEngine(g_hTarget);
 	
 	// Boucle de messages principale :
 	PeekMessage(&msg, NULL, 0, 0, 0); // Don't remove, c'est juste pour avoir un premier message...
@@ -86,6 +89,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 		else
 		{
+			// C'est là que tout se passe... Il ne fallait pas oublier cette ligne !!!
+			g_engine->FrameMove();
 			Sleep(1);
 		}//*/
 	}
@@ -177,7 +182,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	int wmId, wmEvent;
 	PAINTSTRUCT ps;
 	HDC hdc;
-	RECT rect,rect2;
+	RECT rect;//,rect2;
 	WINDOWINFO wi;
 
 	switch (message)
@@ -201,16 +206,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		// Pour fiare un SetVideoMode, on aura besoin de ces dimensions.
 		// Ce n'est pas ici, mais dans WM_SIZE qu'on règle la taille de IDD_TARGET.
 		g_hTarget = GetDlgItem(g_hDlgWnd, IDC_TARGET);
-		g_engine->StartEngine(g_hSDL, g_hTarget);
+		//g_engine->StartEngine(g_hSDL, g_hTarget); // engine can't be started here : windows don't exist yet...
 		
 		// Enregistrement de la position relative du cadre Target dans DlgWnd.
 		// Ceci permet de garder la même position pour l'avenir.
-		GetWindowRect(g_hTarget, &rect);
-		GetWindowRect(g_hDlgWnd, &rect2);
+		/*GetWindowRect(g_hTarget, &rect);
+		GetWindowRect(g_hWnd, &rect2);
 		g_rectDecalageTarget.left = rect2.left-rect.left;
 		g_rectDecalageTarget.right = rect2.right-rect.right;
 		g_rectDecalageTarget.top = rect2.top-rect.top;
-		g_rectDecalageTarget.bottom = rect2.bottom-rect.bottom;
+		g_rectDecalageTarget.bottom = rect2.bottom-rect.bottom;//*/
+		// Belle bidouille dont je suis assez fier...
+		GetWindowRect(g_hTarget, &g_rectDecalageTarget);
+		ScreenToClient(g_hWnd, (POINT *)&g_rectDecalageTarget);
+		ScreenToClient(g_hWnd, (POINT *)(&g_rectDecalageTarget)+1);
+		GetClientRect(g_hWnd, &rect);
+		g_rectDecalageTarget.right -= rect.right;
+		g_rectDecalageTarget.bottom -= rect.bottom;
 		break;
 
 	case WM_SIZE:
@@ -219,10 +231,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		if(hWnd != g_hWnd) // Utile ?
 			return DefWindowProc(hWnd, message, wParam, lParam);
 		
-		GetClientRect(hWnd, &rect);
+		GetClientRect(g_hWnd, &rect);
 		SetWindowPos(g_hDlgWnd, NULL, 0, 0, rect.right, rect.bottom, SWP_NOZORDER);
-		SetWindowPos(g_hTarget, NULL, 0-g_rectDecalageTarget.left, 0-g_rectDecalageTarget.top, rect.right-g_rectDecalageTarget.right, rect.bottom-rect.top-g_rectDecalageTarget.bottom, SWP_NOZORDER);
-		SetWindowPos(g_hSDL, NULL, 0-g_rectDecalageTarget.left, 0-g_rectDecalageTarget.top, rect.right-g_rectDecalageTarget.right, rect.bottom-rect.top-g_rectDecalageTarget.bottom, SWP_NOZORDER);
+		//SetWindowPos(g_hTarget, NULL, 0-g_rectDecalageTarget.left, 0-g_rectDecalageTarget.top, rect.right-g_rectDecalageTarget.right, rect.bottom-rect.top-g_rectDecalageTarget.bottom, SWP_NOZORDER);
+		//SetWindowPos(g_hSDL, NULL, 0-g_rectDecalageTarget.left, 0-g_rectDecalageTarget.top, rect.right-g_rectDecalageTarget.right, rect.bottom-rect.top-g_rectDecalageTarget.bottom, SWP_NOZORDER);
+		SetWindowPos(g_hTarget, NULL, g_rectDecalageTarget.left, g_rectDecalageTarget.top, rect.right-rect.left+g_rectDecalageTarget.right-g_rectDecalageTarget.left, rect.bottom-rect.top+g_rectDecalageTarget.bottom-g_rectDecalageTarget.top, SWP_NOZORDER);
+		SetWindowPos(g_hSDL, NULL, g_rectDecalageTarget.left, g_rectDecalageTarget.top, rect.right-rect.left+g_rectDecalageTarget.right-g_rectDecalageTarget.left, rect.bottom-rect.top+g_rectDecalageTarget.bottom-g_rectDecalageTarget.top, SWP_NOZORDER);
 		
 		break;
 	
